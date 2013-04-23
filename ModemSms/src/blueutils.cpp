@@ -1,4 +1,4 @@
-#define DEBUG 
+#define DEBUG
 
 #include "blueutils.h"
 #include "unicode.h"
@@ -243,16 +243,33 @@ char *blue_utils_get_sms_msg(const char *arg)
 
 string *blue_utils_get_sms_msg(const string& arg)
 {
-	unsigned found = arg.find("0891");
-	cout<<found<<endl;
-	string msg = arg.substr(found);
+    unsigned found = arg.find("0891");
+#ifdef DEBUG
+ 	cout<<arg.substr(found)<<endl;
+#endif
+    string msg = arg.substr(found);
 
-	if(msg.length()>40)
-	{
-		string center_number = msg.substr(0,4);
-		cout<<center_number<<endl;
-		int ret = blue_utils_number_to10(center_number.substr(0,2));
-	}
+    if(msg.length()>40)
+    {
+        string center_number = msg.substr(0,2);
+#ifdef DEBUG
+//        cout<<center_number<<endl;
+#endif
+		const char *center_nl = center_number.c_str();
+        int ret = blue_utils_number_to10(center_nl);
+		//包含短信号码 短信时间 短信内容
+		string msg_ntm = msg.substr(ret*2+2);
+
+	
+		string msg_n = msg_ntm.substr(6,12);
+		cout<<"msg_n="<<msg_n<<endl;
+
+		const char * number = msg_n.c_str();
+		char *send_number = blue_utils_switch_number(number);
+
+		string msg_tm = msg_ntm.substr(22);
+		cout<<msg_tm<<endl;
+    }
 
 }
 
@@ -353,82 +370,6 @@ int blue_utils_number_to10(const char *str)
         size--;
     }
 
-    return ret;
-}
-
-int blue_utils_number_to10(const string& str)
-{
-    int ret = 0;
-
-#ifdef DEBUG	
-	cout<<str<<endl;
-#endif
-	
-	int size = str.length();
-
-	for(int i= 0;i<str.length();i++)
-	{
-		cout<<str.at(i)<<endl;
-		switch(str.at(i))
-		{
-		case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-        {
-            int m = atoi(str.at(i).c_str);
-            ret += m*pow(16,size-1);
-        }
-        break;
-        case 'A':
-        case 'a':
-        {
-            ret +=10*pow(16,size-1);
-        }
-        break;
-        case 'B':
-        case 'b':
-        {
-            ret +=11*pow(16,size-1);
-        }
-        break;
-        case 'C':
-        case 'c':
-        {
-            ret +=12*pow(16,size-1);
-        }
-        break;
-        case 'D':
-        case 'd':
-        {
-            ret +=13*pow(16,size-1);
-        }
-        break;
-        case 'E':
-        case 'e':
-        {
-            ret +=14*pow(16,size-1);
-        }
-        break;
-        case 'F':
-        case 'f':
-        {
-            ret +=15*pow(16,size-1);
-        }
-        break;
-        default:
-            break;
-        }
-        i++;
-        size--;
-	}
-}
     return ret;
 }
 
@@ -653,13 +594,13 @@ char *blue_utils_get_msg_content(const char *str,int arg)
 
                 memset((char *)ch, 0, CHINA_SET_MAX);
 
-               /* if(e = (UnicodetoUTF8(x, ch)) > ch)
-                {
-                    e = '\0';
-                }
-				*/
+                /* if(e = (UnicodetoUTF8(x, ch)) > ch)
+                 {
+                     e = '\0';
+                 }
+                */
 
-				e = UnicodetoUTF8(x,ch);
+                e = UnicodetoUTF8(x,ch);
 
 
                 strcat(msg,(const char *)ch);
@@ -725,7 +666,7 @@ char *blue_utils_get_msg_content(const char *str,int arg)
                 {
                     e = '\0';
                 }*/
-				e = UnicodetoUTF8(x,ch);
+                e = UnicodetoUTF8(x,ch);
 
                 strcat(msg,(const char*)ch);
 
@@ -758,86 +699,86 @@ char *blue_utils_get_msg_content(const char *str,int arg)
         mark[3] = str[5];
         mark[4]='\0';
 
-		printf("************str = %s\n",str);
+        printf("************str = %s\n",str);
 
         if(strcmp(mark,"0500") ==0 )
-        { 
-			char tmp[3];
-		   	tmp[0] = str[0];
-		   	tmp[1] = str[1];
-		   	tmp[2] = '\0';
-			
-		   	int size = blue_utils_number_to10(strdup(tmp));
+        {
+            char tmp[3];
+            tmp[0] = str[0];
+            tmp[1] = str[1];
+            tmp[2] = '\0';
 
-		   	int length = size*2+2;
-		   	printf("size=%d\n",size*2);
-           
-			char *str1 = (char *)malloc(sizeof(char *)*512);
-			memset(str1,'\0',strlen(str1));
+            int size = blue_utils_number_to10(strdup(tmp));
 
-			int i = 16;
-			int j=0;
+            int length = size*2+2;
+            printf("size=%d\n",size*2);
 
-			for(i=16; i<length; i++)
-			{
-				str1[j] = str[i];
+            char *str1 = (char *)malloc(sizeof(char *)*512);
+            memset(str1,'\0',strlen(str1));
+
+            int i = 16;
+            int j=0;
+
+            for(i=16; i<length; i++)
+            {
+                str1[j] = str[i];
                 j++;
             }
 
             str1[j] = '\0';
 
-			printf("str1 = %s\n",str1);
+            printf("str1 = %s\n",str1);
 
-			char out[512];
+            char out[512];
 
-			char *msg1=(char*)PDU_7BIT_Decoding(out,strdup(str1));
+            char *msg1=(char*)PDU_7BIT_Decoding(out,strdup(str1));
 
-			printf("msg = %s\n",out);
+            printf("msg = %s\n",out);
 
-			free(str1);
-			str1 = NULL;
+            free(str1);
+            str1 = NULL;
 
-			return strdup(out);
-  
+            return strdup(out);
+
         }
         else
         {
-			char tmp[3];
-		   	tmp[0] = str[0];
-		   	tmp[1] = str[1];
-		   	tmp[2] = '\0';
-			
-		   	int size = blue_utils_number_to10(strdup(tmp));
+            char tmp[3];
+            tmp[0] = str[0];
+            tmp[1] = str[1];
+            tmp[2] = '\0';
 
-		   	int length = size*2+2;
-           
-			char *str1 = (char *)malloc(sizeof(char *)*512);
-			memset(str1,'\0',strlen(str1));
+            int size = blue_utils_number_to10(strdup(tmp));
 
-			int i = 2;
-			int j=0;
+            int length = size*2+2;
 
-			for(i=2; i<length; i++)
-			{
-				str1[j] = str[i];
+            char *str1 = (char *)malloc(sizeof(char *)*512);
+            memset(str1,'\0',strlen(str1));
+
+            int i = 2;
+            int j=0;
+
+            for(i=2; i<length; i++)
+            {
+                str1[j] = str[i];
                 j++;
             }
 
             str1[j] = '\0';
 
-			printf("str1 = %s\n",str1);
+            printf("str1 = %s\n",str1);
 
-			char out[512];
+            char out[512];
 
-			char *msg1=(char *)PDU_7BIT_Decoding(out,strdup(str1));
+            char *msg1=(char *)PDU_7BIT_Decoding(out,strdup(str1));
 
-			printf("msg = %s\n",out);
+            printf("msg = %s\n",out);
 
-			free(str1);
-			str1 = NULL;
+            free(str1);
+            str1 = NULL;
 
-			return strdup(out);
-			
+            return strdup(out);
+
         }
 
     }

@@ -258,7 +258,7 @@ int initBlueHFP(unsigned int  heartbeatInterval)
 
 		if(found>0)
 		{
-			cout<<found<<endl;
+//			cout<<found<<endl;
 			string *tmp = blue_utils_get_sms_msg(str4);
 		}
 		
