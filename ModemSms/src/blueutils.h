@@ -25,10 +25,15 @@ int blue_utils_number_to10(const string& str);
 
 /*将号码反转*/
 char *blue_utils_switch_number(const char *number);
+string blue_utils_switch_number(const string& str);
+
 /*获得正常号码*/
 char *blue_utils_get_number(const char *number);
 /*获得短信时间*/
 char *blue_utils_get_msg_time(const char* str);
+
+string blue_utils_get_msg_time(const string& str);
+
 /*获得短信内容*/
 char *blue_utils_get_msg_content(const char *str,int arg);
 /*将字符串转为int类型*/

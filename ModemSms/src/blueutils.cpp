@@ -3,6 +3,8 @@
 #include "blueutils.h"
 #include "unicode.h"
 #include <glib.h>
+#include <iostream>
+#include <string>
 
 char *blue_utils_get_center_number(char *arg)
 {
@@ -210,6 +212,8 @@ char *blue_utils_get_sms_msg(const char *arg)
             str1[j]='\0';
 
             char *msg = blue_utils_get_msg_content(strdup(str1),sign);
+	
+			cout<<str1<<endl;
 
 //			printf("%s\t%s\t%s\n",number,time,msg);
 
@@ -243,9 +247,10 @@ char *blue_utils_get_sms_msg(const char *arg)
 
 string *blue_utils_get_sms_msg(const string& arg)
 {
+	string message;
     unsigned found = arg.find("0891");
 #ifdef DEBUG
- 	cout<<arg.substr(found)<<endl;
+    cout<<arg.substr(found)<<endl;
 #endif
     string msg = arg.substr(found);
 
@@ -255,20 +260,56 @@ string *blue_utils_get_sms_msg(const string& arg)
 #ifdef DEBUG
 //        cout<<center_number<<endl;
 #endif
-		const char *center_nl = center_number.c_str();
-        int ret = blue_utils_number_to10(center_nl);
-		//包含短信号码 短信时间 短信内容
-		string msg_ntm = msg.substr(ret*2+2);
+        /*		const char *center_nl = center_number.c_str();
+                int ret = blue_utils_number_to10(center_nl);
 
-	
-		string msg_n = msg_ntm.substr(6,12);
-		cout<<"msg_n="<<msg_n<<endl;
+        		int hex = stoi(center_number,0,16);
+        		printf("hex=%d\n",hex);
+        */
+        int ret = blue_utils_number_to10(center_number);
+        //包含短信号码 短信时间 短信内容
+        string msg_ntm = msg.substr(ret*2+2);
+//		cout<<"msg_ntm="<<msg_ntm<<endl;
 
-		const char * number = msg_n.c_str();
-		char *send_number = blue_utils_switch_number(number);
+        int msg_nl = blue_utils_number_to10(msg_ntm.substr(2,2));
+        string msg_n;
+        if(msg_nl%2==0)
+        {
+            msg_n = msg_ntm.substr(6,msg_nl);
+            const char * number = msg_n.c_str();
+            char *send_number = blue_utils_switch_number(number);
+            cout<<send_number<<endl;
 
-		string msg_tm = msg_ntm.substr(22);
-		cout<<msg_tm<<endl;
+            string msg_tm = msg_ntm.substr(22);
+            cout<<msg_tm<<endl;
+
+        }
+        else
+        {
+            msg_n = msg_ntm.substr(6,msg_nl+1);
+            string send_number = blue_utils_switch_number(msg_n);
+			message+=send_number.substr(0,msg_nl);
+			message+=':';
+
+//			cout<<"message = "<<message<<endl;
+
+            string msg_tm = msg_ntm.substr(6+msg_nl+1);
+			cout<<msg_tm<<endl;
+
+			if(msg_tm.substr(0,4) == "0000")
+			{
+				cout<<"-------------------------"<<msg_tm.substr(0,4)<<endl;
+				string time = blue_utils_get_msg_time(msg_tm.substr(4,14));
+				message+=time;
+				message+=':';
+
+				cout<<"message = "<<message<<endl;
+			}
+			else
+			{
+			}
+
+        }
     }
 
 }
@@ -373,6 +414,11 @@ int blue_utils_number_to10(const char *str)
     return ret;
 }
 
+int blue_utils_number_to10(const string& str)
+{
+    return stoi(str,0,16);
+}
+
 char *blue_utils_switch_number(const char *number)
 {
     if(strlen(number) %2 !=0)
@@ -436,6 +482,39 @@ char *blue_utils_switch_number(const char *number)
         return tmp;
 
     }
+}
+
+string blue_utils_switch_number(const string& str)
+{
+    cout<<str<<endl;
+
+	if(str.length()%2 == 0)
+	{
+		string src = str;
+		string dest;
+
+		for(int i=0;i<src.length();i+=2)
+		{
+			dest+=src[i+1];
+			dest+=src[i];
+		}
+
+		return dest;
+	}
+	else
+	{
+		string src = str;
+		src+='F';
+		string dest;
+		for(int i=0;i>src.length();i+=2)
+		{
+			dest+=src[i+1];
+			dest+=src[i];
+		}
+
+		return dest;
+	}
+
 }
 
 char *blue_utils_get_number(const char *number)
@@ -530,6 +609,39 @@ char *blue_utils_get_msg_time(const char *str)
     time3 = NULL;
 
     return time;
+}
+
+string blue_utils_get_msg_time(const string& str)
+{
+	
+	string src = blue_utils_switch_number(str);
+
+	string time;
+
+	if(src.length()>=10)
+	{	
+		int i =0;
+		time+=src.substr(i,2);
+		time+='-';
+		i+=2;
+		time+=src.substr(i,2);
+		time+='-';
+		i+=2;
+		time+=src.substr(i,2);
+		time+=' ';
+		i+=2;
+		time+=src.substr(i,2);
+		time+=':';
+		i+=2;
+		time+=src.substr(i,2);
+		time+=':';
+		i+=2;
+		time+=src.substr(i,2);
+	}
+
+//	cout<<time<<endl;
+
+	return time;
 }
 
 char *blue_utils_get_msg_content(const char *str,int arg)

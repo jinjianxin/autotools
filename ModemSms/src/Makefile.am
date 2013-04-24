@@ -7,9 +7,15 @@ AM_CPPFLAGS = \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" $(MODEMSMS_CFLAGS)
 
-AM_CFLAGS =\
-	 -Wall\
-	 -g
+#AM_CFLAGS =\
+#	-std=c++0x \
+#	 -Wall\
+#	 -g 
+
+AM_CXXFLAGS = \
+			  -std=c++0x \
+			  -Wall\
+			  -g
 
 bin_PROGRAMS = modemsms
 
