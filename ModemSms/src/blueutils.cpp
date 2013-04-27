@@ -5,6 +5,7 @@
 #include <glib.h>
 #include <iostream>
 #include <string>
+#include <string.h>
 
 char *blue_utils_get_center_number(char *arg)
 {
@@ -161,7 +162,7 @@ char *blue_utils_get_sms_msg(const char *arg)
 
             str2[j]='\0';
 
-            printf("%s\n",str2);
+            printf("str2 = %s\n",str2);
 
 
             i=4;
@@ -212,8 +213,8 @@ char *blue_utils_get_sms_msg(const char *arg)
             str1[j]='\0';
 
             char *msg = blue_utils_get_msg_content(strdup(str1),sign);
-	
-			cout<<str1<<endl;
+
+            cout<<str1<<endl;
 
 //			printf("%s\t%s\t%s\n",number,time,msg);
 
@@ -245,12 +246,12 @@ char *blue_utils_get_sms_msg(const char *arg)
 
 }
 
-string *blue_utils_get_sms_msg(const string& arg)
+string blue_utils_get_sms_msg(const string& arg)
 {
-	string message;
+    string message;
     unsigned found = arg.find("0891");
 #ifdef DEBUG
-    cout<<arg.substr(found)<<endl;
+//    cout<<arg.substr(found)<<endl;
 #endif
     string msg = arg.substr(found);
 
@@ -258,14 +259,8 @@ string *blue_utils_get_sms_msg(const string& arg)
     {
         string center_number = msg.substr(0,2);
 #ifdef DEBUG
-//        cout<<center_number<<endl;
+        cout<<center_number<<endl;
 #endif
-        /*		const char *center_nl = center_number.c_str();
-                int ret = blue_utils_number_to10(center_nl);
-
-        		int hex = stoi(center_number,0,16);
-        		printf("hex=%d\n",hex);
-        */
         int ret = blue_utils_number_to10(center_number);
         //包含短信号码 短信时间 短信内容
         string msg_ntm = msg.substr(ret*2+2);
@@ -281,33 +276,41 @@ string *blue_utils_get_sms_msg(const string& arg)
             cout<<send_number<<endl;
 
             string msg_tm = msg_ntm.substr(22);
-            cout<<msg_tm<<endl;
 
         }
         else
         {
             msg_n = msg_ntm.substr(6,msg_nl+1);
             string send_number = blue_utils_switch_number(msg_n);
-			message+=send_number.substr(0,msg_nl);
-			message+=':';
-
-//			cout<<"message = "<<message<<endl;
+            message+=send_number.substr(0,msg_nl);
+            message+=':';
 
             string msg_tm = msg_ntm.substr(6+msg_nl+1);
-			cout<<msg_tm<<endl;
 
-			if(msg_tm.substr(0,4) == "0000")
-			{
-				cout<<"-------------------------"<<msg_tm.substr(0,4)<<endl;
-				string time = blue_utils_get_msg_time(msg_tm.substr(4,14));
-				message+=time;
-				message+=':';
+            if(msg_tm.substr(0,4) == "0000")
+            {
+                string time = blue_utils_get_msg_time(msg_tm.substr(4,14));
+                message+=time;
+                message+=':';
 
-				cout<<"message = "<<message<<endl;
-			}
-			else
-			{
-			}
+                string content = blue_utils_get_msg_content(msg_tm.substr(18),2);
+
+                message+=content;
+
+                return message;
+//				cout<<message<<endl;
+
+            }
+            else
+            {
+                string time = blue_utils_get_msg_time(msg_tm.substr(4,14));
+                message+=time;
+                message+=':';
+
+                string content = blue_utils_get_msg_content(msg_tm.substr(18),4);
+                message+=content;
+                return message;
+            }
 
         }
     }
@@ -320,7 +323,7 @@ char *blue_utils_number_to16(int size)
     sprintf(tmp,"%x",size);
 
     char * number = (char *)malloc(sizeof(char *)*16);
-    memset(number,'\0',strlen(number));
+//    memset(number,'\0',strlen(number));
 
     if(strlen(tmp) ==1)
     {
@@ -424,9 +427,9 @@ char *blue_utils_switch_number(const char *number)
     if(strlen(number) %2 !=0)
     {
         char *str1 = (char *)malloc(sizeof(char*)*32);
-        memset(str1,'\0',strlen(str1));
+//        memset(str1,0,strlen(str1));
         char * str = (char *)malloc(sizeof(char*)*128);
-        memset(str,'\0',strlen(str));
+  //      memset(str,'\0',strlen(str));
 
         sprintf(str,"%sF",number);
 
@@ -488,32 +491,33 @@ string blue_utils_switch_number(const string& str)
 {
     cout<<str<<endl;
 
-	if(str.length()%2 == 0)
-	{
-		string src = str;
-		string dest;
+    string dest;
+    if(str.length()%2 == 0)
+    {
+        string src = str;
+    //    string dest;
 
-		for(int i=0;i<src.length();i+=2)
-		{
-			dest+=src[i+1];
-			dest+=src[i];
-		}
+        for(int i=0; i<src.length(); i+=2)
+        {
+            dest+=src[i+1];
+            dest+=src[i];
+        }
 
-		return dest;
-	}
-	else
-	{
-		string src = str;
-		src+='F';
-		string dest;
-		for(int i=0;i>src.length();i+=2)
-		{
-			dest+=src[i+1];
-			dest+=src[i];
-		}
+        return dest;
+    }
+    else
+    {
+        string src = str;
+        src+='F';
 
-		return dest;
-	}
+        for(int i=0; i<src.length(); i+=2)
+        {
+            dest+=src[i+1];
+            dest+=src[i];
+        }
+
+        return dest;
+    }
 
 }
 
@@ -613,49 +617,48 @@ char *blue_utils_get_msg_time(const char *str)
 
 string blue_utils_get_msg_time(const string& str)
 {
-	
-	string src = blue_utils_switch_number(str);
 
-	string time;
+    string src = blue_utils_switch_number(str);
 
-	if(src.length()>=10)
-	{	
-		int i =0;
-		time+=src.substr(i,2);
-		time+='-';
-		i+=2;
-		time+=src.substr(i,2);
-		time+='-';
-		i+=2;
-		time+=src.substr(i,2);
-		time+=' ';
-		i+=2;
-		time+=src.substr(i,2);
-		time+=':';
-		i+=2;
-		time+=src.substr(i,2);
-		time+=':';
-		i+=2;
-		time+=src.substr(i,2);
-	}
+    string time;
+
+    if(src.length()>=10)
+    {
+        int i =0;
+        time+=src.substr(i,2);
+        time+='-';
+        i+=2;
+        time+=src.substr(i,2);
+        time+='-';
+        i+=2;
+        time+=src.substr(i,2);
+        time+=' ';
+        i+=2;
+        time+=src.substr(i,2);
+        time+=':';
+        i+=2;
+        time+=src.substr(i,2);
+        time+=':';
+        i+=2;
+        time+=src.substr(i,2);
+    }
 
 //	cout<<time<<endl;
 
-	return time;
+    return time;
 }
 
 char *blue_utils_get_msg_content(const char *str,int arg)
 {
     if(4 == arg )
     {
+
+//		printf("str12=%s\n",str);
+
         unsigned char ch[CHINA_SET_MAX], *p = NULL, *e = NULL;
 
         char *msg = (char *)malloc(sizeof(char *)*512);
         memset(msg,'\0',strlen(msg));
-
-//        printf("str=%s\n",str);
-
-//        printf("str size=%d\n",strlen(str));
 
         char mark[5];
 
@@ -675,7 +678,6 @@ char *blue_utils_get_msg_content(const char *str,int arg)
             int size = blue_utils_number_to10(strdup(tmp));
 
             int length = size*2+2;
-            printf("size=%d\n",size*2);
 
             char *str1 = (char *)malloc(sizeof(char *)*512);
             memset(str1,'\0',strlen(str1));
@@ -740,10 +742,11 @@ char *blue_utils_get_msg_content(const char *str,int arg)
             tmp[1] = str[1];
             tmp[2] = '\0';
 
+//            printf("tmp = %s\n",tmp);
             int size = blue_utils_number_to10(strdup(tmp));
 
             int length = size*2+2;
-            printf("size=%d\n",size*2);
+            //          printf("size=%d\n",size*2);
 
             char *str1 = (char *)malloc(sizeof(char *)*512);
             memset(str1,'\0',strlen(str1));
@@ -860,7 +863,10 @@ char *blue_utils_get_msg_content(const char *str,int arg)
             tmp[1] = str[1];
             tmp[2] = '\0';
 
+
             int size = blue_utils_number_to10(strdup(tmp));
+
+            printf("size = %d\n",size);
 
             int length = size*2+2;
 
@@ -895,6 +901,106 @@ char *blue_utils_get_msg_content(const char *str,int arg)
 
     }
 }
+
+string blue_utils_get_msg_content(const string& str,int sig)
+{
+    if(sig  == 4)
+    {
+        if(str.substr(2,4).compare("0500") == 0)
+        {
+            string content;
+            size_t msg_length = blue_utils_number_to10(str.substr(0,2));
+
+            if(str.length()>msg_length+2)
+            {
+                string msg = str.substr(14,msg_length*2+2);
+
+                unsigned char ch[CHINA_SET_MAX], *p = NULL, *e = NULL;
+
+                for(int i=0; i<msg.length(); i+=4)
+                {
+                    int x = blue_utils_unicode_int(strdup(msg.substr(i,4).c_str()));
+                    memset((char *)ch, 0, CHINA_SET_MAX);
+
+                    e = UnicodetoUTF8(x,ch);
+                    content+=(const char *)ch;
+                }
+                return content;
+            }
+
+        }
+        else
+        {
+            string content;
+
+            size_t msg_length = blue_utils_number_to10(str.substr(0,2));
+
+            if(str.length()>msg_length+2)
+            {
+                string msg = str.substr(2,msg_length*2+2);
+
+                unsigned char ch[CHINA_SET_MAX], *p = NULL, *e = NULL;
+
+                for(int i=0; i<msg.length(); i+=4)
+                {
+                    int x = blue_utils_unicode_int(strdup(msg.substr(i,4).c_str()));
+                    memset((char *)ch, 0, CHINA_SET_MAX);
+
+                    e = UnicodetoUTF8(x,ch);
+                    content+=(const char *)ch;
+                }
+
+                return content;
+
+            }
+
+        }
+    }
+    else
+    {
+        if(str.substr(2,4).compare("0500") == 0)
+        {
+            string content;
+            size_t msg_length = blue_utils_number_to10(str.substr(0,2));
+
+            if(str.length()>msg_length+2)
+            {
+                string msg = str.substr(14,msg_length*2+2);	
+
+				char out[512];
+				char *dest=(char *)PDU_7BIT_Decoding(out,strdup(msg.c_str()));
+				
+				content+=out;
+
+                return content;
+            }
+        }
+        else
+        {
+            string content;
+
+            size_t msg_length = blue_utils_number_to10(str.substr(0,2));
+
+            cout<<msg_length<<endl;
+
+            if(str.length()>msg_length+2)
+            {
+                string msg = str.substr(2,msg_length*2+2);
+                char out[512];
+
+                char *dest=(char *)PDU_7BIT_Decoding(out,strdup(msg.c_str()));
+
+                content+=out;
+
+                return content;
+
+            }
+        }
+    }
+
+    return "test";
+}
+
 
 unsigned long blue_utils_unicode_int(const char* str)
 {

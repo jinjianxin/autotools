@@ -17,6 +17,11 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
+#include <string>
+
+using namespace std;
+
 typedef enum HFPEVENT
 {
 	RING_EVENT,
@@ -68,6 +73,7 @@ int rejectCall();
 int handupCall();
 
 int sendSM(const char *content,const char *number);
+int sendSM(const string& content,const string& number);
 
 int deletesendSM(unsigned short choice);
 

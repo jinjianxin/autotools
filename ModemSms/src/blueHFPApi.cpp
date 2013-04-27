@@ -72,9 +72,12 @@ int name_arr[] = {38400,  19200,  9600,  4800,  2400,  1200,  300, 38400,
 
 void *serial_read_data(gpointer data);
 char *blue_hfp_utf8_tounicode(const char *content);
+string blue_hfp_utf8_tounicode(const string& content);
 char *blue_hfp_unicode_uth8(char *content);
 char *blue_hfp_get_center_number(char *num);
+string blue_hfp_get_center_number(const string& num);
 char *blue_hfp_get_address_number(const char *num);
+string blue_hfp_get_address_number(const string& num);
 char *blue_hfp_process_string(char *msg);
 
 gboolean blue_hfp_read_sms_timeout(gpointer data);
@@ -128,7 +131,7 @@ int initBlueHFP(unsigned int  heartbeatInterval)
         printf("write AT+CMGF=0 success\n");
     }
 
-	commond = "AT+ZCSQ=5\r";
+    commond = "AT+ZCSQ=5\r";
     ret = strlen(commond);
 
     if(ret == write(blueHfp->serial_fd,commond,strlen(commond)))
@@ -136,7 +139,7 @@ int initBlueHFP(unsigned int  heartbeatInterval)
         printf("write AT+ZCSQ=5 success\n");
     }
 
-	commond = "AT+CSQ\r";
+    commond = "AT+CSQ\r";
     ret = strlen(commond);
 
     if(ret == write(blueHfp->serial_fd,commond,strlen(commond)))
@@ -145,7 +148,7 @@ int initBlueHFP(unsigned int  heartbeatInterval)
     }
 
 //    read_id = g_timeout_add_seconds(5,G_CALLBACK(blue_hfp_read_sms_timeout),NULL);
-	read_id = g_timeout_add_seconds(5,blue_hfp_read_sms_timeout,NULL);
+    read_id = g_timeout_add_seconds(5,blue_hfp_read_sms_timeout,NULL);
 
 //    g_timeout_add_seconds(3,G_CALLBACK(blue_hfp_get_at_zpas),NULL);
 
@@ -210,107 +213,134 @@ int initBlueHFP(unsigned int  heartbeatInterval)
     		0891683110301305F0400BA18166018158F70008210142111174238C050003F5030200300030524DFF0C56DE590D0057005800580058004AFF08514D8D39FF095C316709673A4F1A514D8D3954C15C1D4EF7503C0033003400315143768456DB4EBA59579910FF0C88AB62BD4E2D4F1A545853EF518D5E260031540D4EB253CBFF084EB253CB97004E3A554676DF4F1A5458621673B0573A5F00901AFF0930024E5F53EF51736CE8";
     */
 
-/*    	char *str1 = "+CMGR: 0,,159\
-    		\
-    		0891683110301305F0400BA18166018158F70008210142618285238C050003B0030170ED8FA398CE5E2D53778EAB5FC3FF0C6E58571F60C56ECB54737EF5957FFF0100310030002F00320033002000310038003A00300030FF0C0031003200350038003055466237805476DF908060A867655B096E588BB0FF0891D1592A6E565E97FF09514D8D394EAB752899998FA359579910FF0100310030002F00320031002000320034003A";
+    /*    	char *str1 = "+CMGR: 0,,159\
+        		\
+        		0891683110301305F0400BA18166018158F70008210142618285238C050003B0030170ED8FA398CE5E2D53778EAB5FC3FF0C6E58571F60C56ECB54737EF5957FFF0100310030002F00320033002000310038003A00300030FF0C0031003200350038003055466237805476DF908060A867655B096E588BB0FF0891D1592A6E565E97FF09514D8D394EAB752899998FA359579910FF0100310030002F00320031002000320034003A";
 
-        char *p = NULL;
-        p = strstr(str1,"CMGR");
-        if(p !=NULL)
-        {
-            char *tmp = blue_utils_get_sms_msg(str1);
-            printf("%s\n",tmp);
+            char *p = NULL;
+            p = strstr(str1,"CMGR");
+            if(p !=NULL)
+            {
+                char *tmp = blue_utils_get_sms_msg(str1);
+                printf("%s\n",tmp);
+        	}
+    */
+    /*  	char *str2 = "+CMGR: 0,,159\
+      		\
+      		0891683110301305F0400BA18166018158F70008210142618285238C050003B0030200300030524DFF0C56DE590D0057005800580058004AFF08514D8D39FF095C316709673A4F1A514D8D3954C15C1D4EF7503C0033003400315143768456DB4EBA59579910FF0C88AB62BD4E2D4F1A545853EF518D5E260031540D4EB253CBFF084EB253CB97004E3A554676DF4F1A5458621673B0573A5F00901AFF0930024E5F53EF51736CE8";
+
+    	char *p = NULL;
+          p = strstr(str2,"CMGR");
+          if(p !=NULL)
+          {
+    //          char *tmp = blue_utils_get_sms_msg(str2);
+    //            printf("%s\n",tmp);
+      	}
+
+    	 string str3 = "+CMGR: 0,,159\
+      		\
+      		0891683110301305F0400BA18166018158F70008210142618285238C050003B0030200300030524DFF0C56DE590D0057005800580058004AFF08514D8D39FF095C316709673A4F1A514D8D3954C15C1D4EF7503C0033003400315143768456DB4EBA59579910FF0C88AB62BD4E2D4F1A545853EF518D5E260031540D4EB253CBFF084EB253CB97004E3A554676DF4F1A5458621673B0573A5F00901AFF0930024E5F53EF51736CE8";
+
+    	 unsigned found = str3.find("CMGR");
+
+    	 if(found>0)
+    	 {
+    		 cout<<found<<endl;
+    		 string tmp = blue_utils_get_sms_msg(str3);
+    		 cout<<tmp<<endl;
+    	 }
+    */
+
+    /*    	char *str3 = "+CMGR: 0,,27\
+    			\
+    			0891683110301305F0040BA18166018158F70000210162118365230931D98C56B3DD7239";*/
+
+    /*
+    		char *str3 = "+CMGR: 0,,53\
+    			\
+    			0891683110301305F0040BA18166018158F700002101130175452326F4F05C1783C5743119CC25CBE56430DD2CE6AAD9703098AE9D07B1DFE3303DFD7603";
+
+    		char *p = NULL;
+            p = strstr(str3,"CMGR");
+            if(p !=NULL)
+            {
+    			    char *tmp = blue_utils_get_sms_msg(str3);
+        	}
+    		*/
+
+    /*		string str4("+CMGR: 0,,53\
+    			\
+    			0891683110301305F0040BA18166018158F700002101130175452326F4F05C1783C5743119CC25CBE56430DD2CE6AAD9703098AE9D07B1DFE3303DFD7603");
+
+    		unsigned found = str4.find("CMGR");
+
+    		if(found>0)
+    		{
+    //			cout<<found<<endl;
+    			string tmp = blue_utils_get_sms_msg(str4);
+    			cout<<tmp<<endl;
+    		}
+    */
+
+    /*		char *str4 ="+CMGL: 1,0,,136\
+    			\
+    			0891683110300405F12405A10110F0000821019290253423786E2999A863D0793AFF1A81F30032003965E5003165F600330034520660A85F5367085DF275286D4191CF0036002E00350036004D0042FF0C5957991052694F5956FD518500350033002E00340034004D00423002672C6B2167E58BE27ED3679C5B5857285EF665F6FF0C8BF74EE551FA8D264E3A51C63002";
+
+    		char *p = NULL;
+            p = strstr(str4,"CMGL");
+            if(p !=NULL)
+            {
+     //           char *tmp = blue_utils_get_sms_msg(str4);
+       //         printf("%s\n",tmp);
+        	}
+
+    		string str5 ="+CMGL: 1,0,,136\
+    			\
+    			0891683110300405F12405A10110F0000821019290253423786E2999A863D0793AFF1A81F30032003965E5003165F600330034520660A85F5367085DF275286D4191CF0036002E00350036004D0042FF0C5957991052694F5956FD518500350033002E00340034004D00423002672C6B2167E58BE27ED3679C5B5857285EF665F6FF0C8BF74EE551FA8D264E3A51C63002";
+
+    		unsigned found = str5.find("CMGR");
+
+    		if(found>0)
+    		{
+    			string tmp = blue_utils_get_sms_msg(str5);
+    			cout<<tmp<<endl;
+    		}
+
+    */
+    /*
+    	char *str3 = "+CMGR: 0,,95\
+        		\
+        		0891683110301305F0440BA18166018158F70008210142618295234C050003B00303201C65E0952179FB52A800310032003500380030554676DF201D65B06D6A5FAE535A53C24E0E76F851736D3B52A8300230100031003200350038003055466237805476DF3011";
+
+    	char *p = NULL;
+    	p = NULL;
+    	p = strstr(str3,"CMGR");
+    	if(p !=NULL)
+    	{
+    		int i =0 ;
+
+    		for(i = 0;i<5;i++)
+    		{
+    			g_queue_push_tail(smsQueue,str3);
+    		}
     	}
 
-    	char *str2 = "+CMGR: 0,,159\
-    		\
-    		0891683110301305F0400BA18166018158F70008210142618285238C050003B0030200300030524DFF0C56DE590D0057005800580058004AFF08514D8D39FF095C316709673A4F1A514D8D3954C15C1D4EF7503C0033003400315143768456DB4EBA59579910FF0C88AB62BD4E2D4F1A545853EF518D5E260031540D4EB253CBFF084EB253CB97004E3A554676DF4F1A5458621673B0573A5F00901AFF0930024E5F53EF51736CE8";
-
-        p = NULL;
-        p = strstr(str2,"CMGR");
-        if(p !=NULL)
-        {
-            char *tmp = blue_utils_get_sms_msg(str2);
-            printf("%s\n",tmp);
+    	if(process_id == 0)
+    	{
+    		process_id = g_timeout_add_seconds(3,G_CALLBACK(blue_hfp_process_string_timeout),NULL);
     	}
-*/
-/*    	char *str3 = "+CMGR: 0,,27\
-			\
-			0891683110301305F0040BA18166018158F70000210162118365230931D98C56B3DD7239";*/
+    	*/
 
-
-		char *str3 = "+CMGR: 0,,53\
-			\
-			0891683110301305F0040BA18166018158F700002101130175452326F4F05C1783C5743119CC25CBE56430DD2CE6AAD9703098AE9D07B1DFE3303DFD7603";
-		
-		char *p = NULL;
-        p = strstr(str3,"CMGR");
-        if(p !=NULL)
-        {
-            //char *tmp = blue_utils_get_sms_msg(str3);
+    /*	char *str3 = "+CSQ: 17,99";
+    	char *p = NULL;
+    	p = NULL;
+    	p = strstr(str3,"CSQ");
+    	if(p !=NULL)
+    	{
+    		char *tmp = blue_utils_get_signal(str3);
+    		printf("tmp = %s\n",tmp);
     	}
-
-		string str4("+CMGR: 0,,53\
-			\
-			0891683110301305F0040BA18166018158F700002101130175452326F4F05C1783C5743119CC25CBE56430DD2CE6AAD9703098AE9D07B1DFE3303DFD7603");
-
-		unsigned found = str4.find("CMGR");
-
-		if(found>0)
-		{
-//			cout<<found<<endl;
-			string *tmp = blue_utils_get_sms_msg(str4);
-		}
-		
-
- 
-/*		char *str4 ="+CMGL: 1,0,,136\
-			\
-			0891683110300405F12405A10110F0000821019290253423786E2999A863D0793AFF1A81F30032003965E5003165F600330034520660A85F5367085DF275286D4191CF0036002E00350036004D0042FF0C5957991052694F5956FD518500350033002E00340034004D00423002672C6B2167E58BE27ED3679C5B5857285EF665F6FF0C8BF74EE551FA8D264E3A51C63002";
-
-		p = NULL;
-        p = strstr(str4,"CMGL");
-        if(p !=NULL)
-        {
-            char *tmp = blue_utils_get_sms_msg(str4);
-            printf("%s\n",tmp);
-    	}
- */
-
-/*
-	char *str3 = "+CMGR: 0,,95\
-    		\
-    		0891683110301305F0440BA18166018158F70008210142618295234C050003B00303201C65E0952179FB52A800310032003500380030554676DF201D65B06D6A5FAE535A53C24E0E76F851736D3B52A8300230100031003200350038003055466237805476DF3011";
-
-	char *p = NULL;
-	p = NULL;
-	p = strstr(str3,"CMGR");
-	if(p !=NULL)
-	{
-		int i =0 ;
-
-		for(i = 0;i<5;i++)
-		{
-			g_queue_push_tail(smsQueue,str3);
-		}
-	}
-
-	if(process_id == 0)
-	{
-		process_id = g_timeout_add_seconds(3,G_CALLBACK(blue_hfp_process_string_timeout),NULL);
-	}
-	*/
-
-/*	char *str3 = "+CSQ: 17,99";
-	char *p = NULL;
-	p = NULL;
-	p = strstr(str3,"CSQ");
-	if(p !=NULL)
-	{
-		char *tmp = blue_utils_get_signal(str3);
-		printf("tmp = %s\n",tmp);
-	}
-*/
+    */
 
     return HFP_SUCCESS;
 }
@@ -463,7 +493,7 @@ int dial(const char* number)
 
 int dialExtNumber(const char* number)
 {
-	blueHfp->lock = FALSE;
+    blueHfp->lock = FALSE;
     char *commond = (char *)malloc(sizeof(char *)*128);
     memset(commond,0,strlen(commond));
 
@@ -523,6 +553,7 @@ int handupCall()
 int sendSM(const char *content,const char *number)
 {
     char *addressNumber = blue_hfp_get_address_number(number);
+    //printf("addressNumber=%s\n",addressNumber);
 
     char *size = blue_utils_number_to16(strlen(number));
 
@@ -532,6 +563,8 @@ int sendSM(const char *content,const char *number)
     sprintf(sendMsg,"1100%s91%s",size,addressNumber);
 
     char *centerNumber = blue_hfp_get_center_number(blueHfp->centerNumber);
+
+    printf("centerNumber=%s\n",centerNumber);
 
     char *msg = blue_hfp_utf8_tounicode(content);
 
@@ -573,10 +606,50 @@ int sendSM(const char *content,const char *number)
 
     blueHfp->lock = TRUE;
 
-	sms_id = g_timeout_add_seconds(15,blue_hfp_send_sms_timeout,NULL);
-	send_sms = TRUE;
+    sms_id = g_timeout_add_seconds(15,blue_hfp_send_sms_timeout,NULL);
+    send_sms = TRUE;
 
-	return HFP_SUCCESS;
+    return HFP_SUCCESS;
+}
+
+int sendSM(const string& content,const string& number)
+{
+    cout<<"C++****************************************C++"<<endl;
+    string addressNumber = blue_hfp_get_address_number(number);
+
+    //cout<<"addressNumber="<<addressNumber<<endl;
+    string centerNumber = blue_hfp_get_center_number(string(blueHfp->centerNumber));
+//	cout<<"centerNumber="<<centerNumber<<endl;
+
+    string msg = blue_hfp_utf8_tounicode(content);
+
+	//sprintf(commond,"%s%s000800%s\x1A",centerNumber,addressNumber,msg);
+	string commond = centerNumber+addressNumber+"000800"+msg+"\x1A";
+
+	char commond1[64];
+
+	sprintf(commond1,"AT+CMGS=%d\r",(addressNumber.length()+6+msg.length())/2);
+
+   	blueHfp->lock = FALSE;
+
+    int ret =  strlen(commond1);
+    if(ret == write(blueHfp->serial_fd,commond1,ret))
+    {
+        printf("commond1 success\n");
+    }
+
+    ret = commond.length();
+    if(ret == write(blueHfp->serial_fd,commond.c_str(),ret))
+    {
+        printf("commond success\n");
+    }
+
+	cout<<"commond1= "<<commond1<<endl;
+	cout<<commond<<endl;
+
+    blueHfp->lock = TRUE;
+
+
 }
 
 int deletesendSM(unsigned short choice)
@@ -607,6 +680,15 @@ char *blue_hfp_get_center_number(char *num)
     return number;
 }
 
+string blue_hfp_get_center_number(const string& num)
+{
+    string number = blue_utils_switch_number(num);
+    string size = blue_utils_number_to16(("91"+number).length()/2);
+
+    return string(size+"91"+number);
+
+}
+
 char *blue_hfp_get_address_number(const char *num)
 {
     char *str1 = blue_utils_switch_number(num);
@@ -623,6 +705,14 @@ char *blue_hfp_get_address_number(const char *num)
     str3 = NULL;
 
     return number;
+}
+
+string blue_hfp_get_address_number(const string& num)
+{
+    string str = blue_utils_switch_number(num);
+    string size = blue_utils_number_to16(str.length());
+
+    return string("1100"+size+"91"+str);
 }
 
 char *blue_hfp_utf8_tounicode(const char *content)
@@ -651,22 +741,22 @@ char *blue_hfp_utf8_tounicode(const char *content)
                 n = UTF8toUnicode((unsigned char *)str,&unicode);
                 if(unicode<255)
                 {
-/*                    char str[16] ;
-                    sprintf(str,"00%x",unicode);
-                    strcat(msg,str);*/
+                    /*                    char str[16] ;
+                                        sprintf(str,"00%x",unicode);
+                                        strcat(msg,str);*/
 
-					char str[16] ;
-					sprintf(str,"00%x",unicode);
-					if(strlen(str) == 3)	
-					{
-						char tmp[16];
-						sprintf(tmp,"0%s",str);
-						strcat(msg,tmp);
-					}
-					else	
-					{
-						strcat(msg,str);
-					}
+                    char str[16] ;
+                    sprintf(str,"00%x",unicode);
+                    if(strlen(str) == 3)
+                    {
+                        char tmp[16];
+                        sprintf(tmp,"0%s",str);
+                        strcat(msg,tmp);
+                    }
+                    else
+                    {
+                        strcat(msg,str);
+                    }
                 }
                 else
                 {
@@ -720,6 +810,75 @@ char *blue_hfp_utf8_tounicode(const char *content)
     name = NULL;
 
     char *message = strdup(tmp);
+
+    return message;
+}
+
+string blue_hfp_utf8_tounicode(const string& content)
+{
+	int i = 0, n = 0, unicode = 0;
+
+	string message;
+
+    for(int i=0; i<content.length(); NULL)
+    {
+        const char *str = content.substr(i,1).c_str();
+
+        if(str[0] >=0 && str[0]<=127)
+        {
+            n = UTF8toUnicode((unsigned char *)str,&unicode);
+            if(unicode<255)
+            {
+
+                char str[16] ;
+                sprintf(str,"00%x",unicode);
+                if(strlen(str) == 3)
+                {
+                    char tmp[16];
+                    sprintf(tmp,"0%s",str);
+					message+=tmp;
+                }
+                else
+                {
+					message+=str;                  
+                }
+            }
+            else
+            {
+                char str[16] ;
+                sprintf(str,"%x",unicode);
+				message+=str;
+            }
+
+            i++;
+        }
+        else
+        {
+			const char *str = content.substr(i,3).c_str();
+
+            n = UTF8toUnicode((unsigned char *)str,&unicode);
+            if(unicode<255)
+            {
+                char str[16];
+                sprintf(str,"00%x",unicode);
+                message+=str;
+            }
+            else
+            {
+                char str[16];
+                sprintf(str,"%x",unicode);
+				message+=str;
+            }
+
+            i+=3;
+        }
+    }
+
+	string str = blue_utils_number_to16(message.length()/2);
+
+	message.insert(0,str);
+
+//    cout<<message<<endl;
 
     return message;
 }
@@ -802,9 +961,9 @@ char *blue_hfp_process_string(char *msg)
             }
         }
     }
-	else if(p = strstr(msg,"NO CARRIER"))
-	{
-		if(p !=NULL)
+    else if(p = strstr(msg,"NO CARRIER"))
+    {
+        if(p !=NULL)
         {
             if(blueHfp->hfpCallback)
             {
@@ -812,7 +971,7 @@ char *blue_hfp_process_string(char *msg)
             }
         }
 
-	}
+    }
     else if(p = strstr(msg,"+CLIP"))
     {
         if(p = strstr(msg,"+CLIP"))
@@ -884,7 +1043,7 @@ char *blue_hfp_process_string(char *msg)
             if(process_id == 0)
             {
                 //process_id = g_timeout_add_seconds(3,G_CALLBACK((void *)blue_hfp_process_string_timeout),NULL);
-				process_id = g_timeout_add_seconds(3,blue_hfp_process_string_timeout,NULL);
+                process_id = g_timeout_add_seconds(3,blue_hfp_process_string_timeout,NULL);
             }
 
             g_queue_push_tail(smsQueue,msg);
@@ -895,19 +1054,19 @@ char *blue_hfp_process_string(char *msg)
         if(p !=NULL)
         {
             char *str = strdup(msg);
-/*            printf("***********%s\n",msg);
-            char *tmp= blue_utils_get_sms_msg(str);
+            /*            printf("***********%s\n",msg);
+                        char *tmp= blue_utils_get_sms_msg(str);
 
-            if(tmp !=NULL)
-            {
-                if(blueHfp->hfpCallback)
-                {
-                    (blueHfp->hfpCallback)(SMMT_EVENT,NULL,tmp);
-                }
-            }
-			*/
+                        if(tmp !=NULL)
+                        {
+                            if(blueHfp->hfpCallback)
+                            {
+                                (blueHfp->hfpCallback)(SMMT_EVENT,NULL,tmp);
+                            }
+                        }
+            			*/
 
-			if(process_id == 0)
+            if(process_id == 0)
             {
                 process_id = g_timeout_add_seconds(3,blue_hfp_process_string_timeout,NULL);
             }
@@ -916,35 +1075,35 @@ char *blue_hfp_process_string(char *msg)
 
         }
     }
-	else if(p = strstr(msg,"CSQ"))
-	{
-		if(p !=NULL)
-		{
-			char *tmp = blue_utils_get_signal(msg);
-			printf("singal = %s\n",tmp);
-			if(blueHfp->hfpCallback)
-			{
-				(blueHfp->hfpCallback)(SINGAL_EVENT,NULL,(unsigned long)tmp);
-			}
-		}
-	}
-	else if(p = strstr(msg,"+CMGS:"))
-	{
-		if(p !=NULL)
-		{
-			if(blueHfp->hfpCallback)
-			{
-				(blueHfp->hfpCallback)(SMS_SUCCESS,NULL,NULL);
-				if(sms_id !=0)
-				{
-					g_source_remove(sms_id);
-					sms_id = 0;
-				}
+    else if(p = strstr(msg,"CSQ"))
+    {
+        if(p !=NULL)
+        {
+            char *tmp = blue_utils_get_signal(msg);
+            printf("singal = %s\n",tmp);
+            if(blueHfp->hfpCallback)
+            {
+                (blueHfp->hfpCallback)(SINGAL_EVENT,NULL,(unsigned long)tmp);
+            }
+        }
+    }
+    else if(p = strstr(msg,"+CMGS:"))
+    {
+        if(p !=NULL)
+        {
+            if(blueHfp->hfpCallback)
+            {
+                (blueHfp->hfpCallback)(SMS_SUCCESS,NULL,NULL);
+                if(sms_id !=0)
+                {
+                    g_source_remove(sms_id);
+                    sms_id = 0;
+                }
 
-				send_sms = FALSE;
-			}
-		}
-	}
+                send_sms = FALSE;
+            }
+        }
+    }
 }
 
 void setMsgCallBack(HFPCallback pFunc,void *data)
@@ -972,20 +1131,20 @@ void setMsgCallBack(HFPCallback pFunc,void *data)
 
 gboolean blue_hfp_send_sms_timeout(gpointer data)
 {
-	if(sms_id !=0)
-	{
-		g_source_remove(sms_id);
+    if(sms_id !=0)
+    {
+        g_source_remove(sms_id);
         sms_id = 0;
-	}
+    }
 
-	if(blueHfp->hfpCallback)
-	{
-		(blueHfp->hfpCallback)(SMS_FAILED,NULL,NULL);
-	}
+    if(blueHfp->hfpCallback)
+    {
+        (blueHfp->hfpCallback)(SMS_FAILED,NULL,NULL);
+    }
 
-	send_sms = FALSE;
+    send_sms = FALSE;
 
-	return FALSE;
+    return FALSE;
 }
 
 gboolean blue_hfp_read_sms_timeout(gpointer data)
@@ -1096,34 +1255,34 @@ gboolean blue_hfp_process_string_timeout(gpointer data)
         g_source_remove(process_id);
         process_id = 0;
 
-	    char *commond = "AT+CMGD=1,3\r";
+        char *commond = "AT+CMGD=1,3\r";
 
-		int size = strlen(commond);
+        int size = strlen(commond);
 
-		if(size == write(blueHfp->serial_fd,commond,strlen(commond)))
-		{
-			printf("read sms  success\n");
-		}
+        if(size == write(blueHfp->serial_fd,commond,strlen(commond)))
+        {
+            printf("read sms  success\n");
+        }
 
-	}
+    }
     else
     {
 
-		printf("-----------------------\n");
+        printf("-----------------------\n");
         gpointer str= g_queue_pop_head(smsQueue);
-            
-		char *tmp= blue_utils_get_sms_msg((char *)str);
 
-		printf("*********************%s\n",tmp);
-        
-		if(tmp !=NULL)
-		{
-			if(blueHfp->hfpCallback)
-			{
-				(blueHfp->hfpCallback)(SMMT_EVENT,NULL,(int)tmp);
-			}
-		}
-	}
+        char *tmp= blue_utils_get_sms_msg((char *)str);
+
+        printf("*********************%s\n",tmp);
+
+        if(tmp !=NULL)
+        {
+            if(blueHfp->hfpCallback)
+            {
+                (blueHfp->hfpCallback)(SMMT_EVENT,NULL,(int)tmp);
+            }
+        }
+    }
 
 
 
@@ -1155,18 +1314,18 @@ void test()
 
     }*/
 
-/*		char *str3 = "+CMGR: 0,,53\
-			\
-			0891683110301305F0040BA18166018158F700002101130175452326F4F05C1783C5743119CC25CBE56430DD2CE6AAD9703098AE9D07B1DFE3303DFD7603";
+    /*		char *str3 = "+CMGR: 0,,53\
+    			\
+    			0891683110301305F0040BA18166018158F700002101130175452326F4F05C1783C5743119CC25CBE56430DD2CE6AAD9703098AE9D07B1DFE3303DFD7603";
 
-		char *p = NULL;
-        p = strstr(str3,"CMGR");
-        if(p !=NULL)
-        {
-            char *tmp = blue_utils_get_sms_msg(str3);
-            printf("%s\n",tmp);
-			(blueHfp->hfpCallback)(SMMT_EVENT,NULL,tmp);
-    	}
+    		char *p = NULL;
+            p = strstr(str3,"CMGR");
+            if(p !=NULL)
+            {
+                char *tmp = blue_utils_get_sms_msg(str3);
+                printf("%s\n",tmp);
+    			(blueHfp->hfpCallback)(SMMT_EVENT,NULL,tmp);
+        	}
 
-*/
+    */
 }

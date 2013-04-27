@@ -74,9 +74,7 @@ void *serial_read_data(gpointer data);
 char *blue_hfp_utf8_tounicode(const char *content);
 string blue_hfp_utf8_tounicode(const string& content);
 char *blue_hfp_unicode_uth8(char *content);
-char *blue_hfp_get_center_number(char *num);
 string blue_hfp_get_center_number(const string& num);
-char *blue_hfp_get_address_number(const char *num);
 string blue_hfp_get_address_number(const string& num);
 char *blue_hfp_process_string(char *msg);
 
@@ -147,200 +145,10 @@ int initBlueHFP(unsigned int  heartbeatInterval)
         printf("write AT+CSQ=0 success\n");
     }
 
-//    read_id = g_timeout_add_seconds(5,G_CALLBACK(blue_hfp_read_sms_timeout),NULL);
     read_id = g_timeout_add_seconds(5,blue_hfp_read_sms_timeout,NULL);
 
-//    g_timeout_add_seconds(3,G_CALLBACK(blue_hfp_get_at_zpas),NULL);
 
     blueHfp->lock = FALSE;
-
-    /*	commond = "AT+CMGL=4\t";
-
-        int size = strlen(commond);
-
-        if(size == write(blueHfp->serial_fd,commond,strlen(commond)))
-        {
-            printf("read sms  success\n");
-        }
-
-        printf("%s\n",commond);
-
-    	blueHfp->lock = TRUE;
-    	*/
-
-
-    /*	char *str = "+CSCA: \"+8613010331500\",145";
-
-    	char *tmp = blue_utils_get_center_number(str);
-    	printf("%s\n",tmp);
-
-    	char *str = "+CLIP: \"18661018857\",128,,,,0";
-
-    	char *tmp = blue_utils_get_ring_number(str);
-    	printf("%s\n",tmp);
-
-
-    	char *str = "+CMGL: 0,1,,25\
-    				  0891683110406505F0240BA15161512770F1000821010221749523066D4B8BD57684";
-
-    	char *tmp = blue_utils_get_sms_msg(str);
-
-    	printf("tmp=%s\n",tmp);
-
-    	if(tmp !=NULL)
-    	{
-     		if(blueHfp->hfpCallback)
-    		{
-    			(blueHfp->hfpCallback)(SMMT_EVENT,NULL,tmp);
-    		}
-    	}
-    */
-    /*
-    	char *str = "+CMTI: \"ME\",12";
-
-    	char *index = blue_utils_notify_sms(str);
-
-    	printf("index=%s\n",index);
-    	*/
-    /*
-        char *str = "+CMGR: 0,,31\
-        		0891683110406505F0240BA15161512770F10008210122418232230C6D4B8BD58D1F62C55F975230";
-
-    */
-
-    /*	char *str = "+CMGR: 0,,159\
-    				 \
-    		0891683110301305F0400BA18166018158F70008210142111174238C050003F5030200300030524DFF0C56DE590D0057005800580058004AFF08514D8D39FF095C316709673A4F1A514D8D3954C15C1D4EF7503C0033003400315143768456DB4EBA59579910FF0C88AB62BD4E2D4F1A545853EF518D5E260031540D4EB253CBFF084EB253CB97004E3A554676DF4F1A5458621673B0573A5F00901AFF0930024E5F53EF51736CE8";
-    */
-
-    /*    	char *str1 = "+CMGR: 0,,159\
-        		\
-        		0891683110301305F0400BA18166018158F70008210142618285238C050003B0030170ED8FA398CE5E2D53778EAB5FC3FF0C6E58571F60C56ECB54737EF5957FFF0100310030002F00320033002000310038003A00300030FF0C0031003200350038003055466237805476DF908060A867655B096E588BB0FF0891D1592A6E565E97FF09514D8D394EAB752899998FA359579910FF0100310030002F00320031002000320034003A";
-
-            char *p = NULL;
-            p = strstr(str1,"CMGR");
-            if(p !=NULL)
-            {
-                char *tmp = blue_utils_get_sms_msg(str1);
-                printf("%s\n",tmp);
-        	}
-    */
-    /*  	char *str2 = "+CMGR: 0,,159\
-      		\
-      		0891683110301305F0400BA18166018158F70008210142618285238C050003B0030200300030524DFF0C56DE590D0057005800580058004AFF08514D8D39FF095C316709673A4F1A514D8D3954C15C1D4EF7503C0033003400315143768456DB4EBA59579910FF0C88AB62BD4E2D4F1A545853EF518D5E260031540D4EB253CBFF084EB253CB97004E3A554676DF4F1A5458621673B0573A5F00901AFF0930024E5F53EF51736CE8";
-
-    	char *p = NULL;
-          p = strstr(str2,"CMGR");
-          if(p !=NULL)
-          {
-    //          char *tmp = blue_utils_get_sms_msg(str2);
-    //            printf("%s\n",tmp);
-      	}
-
-    	 string str3 = "+CMGR: 0,,159\
-      		\
-      		0891683110301305F0400BA18166018158F70008210142618285238C050003B0030200300030524DFF0C56DE590D0057005800580058004AFF08514D8D39FF095C316709673A4F1A514D8D3954C15C1D4EF7503C0033003400315143768456DB4EBA59579910FF0C88AB62BD4E2D4F1A545853EF518D5E260031540D4EB253CBFF084EB253CB97004E3A554676DF4F1A5458621673B0573A5F00901AFF0930024E5F53EF51736CE8";
-
-    	 unsigned found = str3.find("CMGR");
-
-    	 if(found>0)
-    	 {
-    		 cout<<found<<endl;
-    		 string tmp = blue_utils_get_sms_msg(str3);
-    		 cout<<tmp<<endl;
-    	 }
-    */
-
-    /*    	char *str3 = "+CMGR: 0,,27\
-    			\
-    			0891683110301305F0040BA18166018158F70000210162118365230931D98C56B3DD7239";*/
-
-    /*
-    		char *str3 = "+CMGR: 0,,53\
-    			\
-    			0891683110301305F0040BA18166018158F700002101130175452326F4F05C1783C5743119CC25CBE56430DD2CE6AAD9703098AE9D07B1DFE3303DFD7603";
-
-    		char *p = NULL;
-            p = strstr(str3,"CMGR");
-            if(p !=NULL)
-            {
-    			    char *tmp = blue_utils_get_sms_msg(str3);
-        	}
-    		*/
-
-    /*		string str4("+CMGR: 0,,53\
-    			\
-    			0891683110301305F0040BA18166018158F700002101130175452326F4F05C1783C5743119CC25CBE56430DD2CE6AAD9703098AE9D07B1DFE3303DFD7603");
-
-    		unsigned found = str4.find("CMGR");
-
-    		if(found>0)
-    		{
-    //			cout<<found<<endl;
-    			string tmp = blue_utils_get_sms_msg(str4);
-    			cout<<tmp<<endl;
-    		}
-    */
-
-    /*		char *str4 ="+CMGL: 1,0,,136\
-    			\
-    			0891683110300405F12405A10110F0000821019290253423786E2999A863D0793AFF1A81F30032003965E5003165F600330034520660A85F5367085DF275286D4191CF0036002E00350036004D0042FF0C5957991052694F5956FD518500350033002E00340034004D00423002672C6B2167E58BE27ED3679C5B5857285EF665F6FF0C8BF74EE551FA8D264E3A51C63002";
-
-    		char *p = NULL;
-            p = strstr(str4,"CMGL");
-            if(p !=NULL)
-            {
-     //           char *tmp = blue_utils_get_sms_msg(str4);
-       //         printf("%s\n",tmp);
-        	}
-
-    		string str5 ="+CMGL: 1,0,,136\
-    			\
-    			0891683110300405F12405A10110F0000821019290253423786E2999A863D0793AFF1A81F30032003965E5003165F600330034520660A85F5367085DF275286D4191CF0036002E00350036004D0042FF0C5957991052694F5956FD518500350033002E00340034004D00423002672C6B2167E58BE27ED3679C5B5857285EF665F6FF0C8BF74EE551FA8D264E3A51C63002";
-
-    		unsigned found = str5.find("CMGR");
-
-    		if(found>0)
-    		{
-    			string tmp = blue_utils_get_sms_msg(str5);
-    			cout<<tmp<<endl;
-    		}
-
-    */
-    /*
-    	char *str3 = "+CMGR: 0,,95\
-        		\
-        		0891683110301305F0440BA18166018158F70008210142618295234C050003B00303201C65E0952179FB52A800310032003500380030554676DF201D65B06D6A5FAE535A53C24E0E76F851736D3B52A8300230100031003200350038003055466237805476DF3011";
-
-    	char *p = NULL;
-    	p = NULL;
-    	p = strstr(str3,"CMGR");
-    	if(p !=NULL)
-    	{
-    		int i =0 ;
-
-    		for(i = 0;i<5;i++)
-    		{
-    			g_queue_push_tail(smsQueue,str3);
-    		}
-    	}
-
-    	if(process_id == 0)
-    	{
-    		process_id = g_timeout_add_seconds(3,G_CALLBACK(blue_hfp_process_string_timeout),NULL);
-    	}
-    	*/
-
-    /*	char *str3 = "+CSQ: 17,99";
-    	char *p = NULL;
-    	p = NULL;
-    	p = strstr(str3,"CSQ");
-    	if(p !=NULL)
-    	{
-    		char *tmp = blue_utils_get_signal(str3);
-    		printf("tmp = %s\n",tmp);
-    	}
-    */
 
     return HFP_SUCCESS;
 }
@@ -550,68 +358,6 @@ int handupCall()
 
 }
 
-int sendSM(const char *content,const char *number)
-{
-    char *addressNumber = blue_hfp_get_address_number(number);
-    //printf("addressNumber=%s\n",addressNumber);
-
-    char *size = blue_utils_number_to16(strlen(number));
-
-    char *sendMsg  = (char *)malloc(sizeof(char *)*1024);
-    memset(sendMsg,'\0',strlen(sendMsg));
-
-    sprintf(sendMsg,"1100%s91%s",size,addressNumber);
-
-    char *centerNumber = blue_hfp_get_center_number(blueHfp->centerNumber);
-
-    printf("centerNumber=%s\n",centerNumber);
-
-    char *msg = blue_hfp_utf8_tounicode(content);
-
-    printf("%s\n",msg);
-
-    char *commond  = (char *)malloc(sizeof(char *)*512);
-    memset(commond,'\0',strlen(commond));
-
-    sprintf(commond,"%s%s000800%s\x1A",centerNumber,addressNumber,msg);
-
-    printf("%d\n",strlen(addressNumber)+6+strlen(msg));
-
-
-    char * commond1 = (char *)malloc(sizeof(char *)*64);
-    memset(commond1,'\0',strlen(commond1));
-
-    char *commond2 = (char *)malloc(sizeof(char *)*1024);
-    memset(commond2,'\0',strlen(commond2));
-
-    sprintf(commond1,"AT+CMGS=%d\r",(strlen(addressNumber)+6+strlen(msg))/2);
-
-    sprintf(commond2,"%s",commond);
-    printf("%s\n%s\n",commond1,commond2);
-
-    blueHfp->lock = FALSE;
-
-    int ret = strlen(commond1);
-    if(ret == write(blueHfp->serial_fd,commond1,strlen(commond1)))
-    {
-        printf("commond1 success\n");
-    }
-
-    ret = strlen(commond2);
-    if(ret == write(blueHfp->serial_fd,commond2,strlen(commond2)))
-    {
-        printf("commond2 success\n");
-    }
-
-
-    blueHfp->lock = TRUE;
-
-    sms_id = g_timeout_add_seconds(15,blue_hfp_send_sms_timeout,NULL);
-    send_sms = TRUE;
-
-    return HFP_SUCCESS;
-}
-
 int sendSM(const string& content,const string& number)
 {
     cout<<"C++****************************************C++"<<endl;
@@ -660,26 +406,6 @@ int readSM(unsigned short choice)
 {
 }
 
-char *blue_hfp_get_center_number(char *num)
-{
-    char *str1 = blue_utils_switch_number(num);
-    char str2[32];
-    sprintf(str2,"91%s",str1);
-    char *size = blue_utils_number_to16(strlen(str2)/2);
-
-    char *str3 = (char *)malloc(sizeof(char *)*32);
-    memset(str3,'\0',strlen(str3));
-
-    sprintf(str3,"%s%s",size,str2);
-
-    char *number = strdup(str3);
-
-    free(str3);
-    str3 = NULL;
-
-    return number;
-}
-
 string blue_hfp_get_center_number(const string& num)
 {
     string number = blue_utils_switch_number(num);
@@ -689,23 +415,6 @@ string blue_hfp_get_center_number(const string& num)
 
 }
 
-char *blue_hfp_get_address_number(const char *num)
-{
-    char *str1 = blue_utils_switch_number(num);
-    char *size = blue_utils_number_to16(strlen(num));
-
-    char *str3 = (char *)malloc(sizeof(char *)*64);
-    memset(str3,'\0',strlen(str3));
-
-    sprintf(str3,"1100%s91%s",size,str1);
-
-    char *number = strdup(str3);
-
-    free(str3);
-    str3 = NULL;
-
-    return number;
-}
 
 string blue_hfp_get_address_number(const string& num)
 {
@@ -717,7 +426,6 @@ string blue_hfp_get_address_number(const string& num)
 
 char *blue_hfp_utf8_tounicode(const char *content)
 {
-    unsigned char ch[CHINA_SET_MAX], *p = NULL, *e = NULL, *s = NULL;
     int i = 0, n = 0, unicode = 0;
 
     char *msg = (char*)malloc(sizeof(char *)*512);
@@ -816,7 +524,7 @@ char *blue_hfp_utf8_tounicode(const char *content)
 
 string blue_hfp_utf8_tounicode(const string& content)
 {
-	int i = 0, n = 0, unicode = 0;
+	int n=0,  unicode = 0;
 
 	string message;
 
@@ -1232,6 +940,8 @@ gboolean blue_hfp_delete_sim_sms(gpointer data)
     commond = NULL;
 
     blueHfp->lock = TRUE;
+
+	return FALSE;
 }
 
 gboolean blue_hfp_get_at_zpas(gpointer data)
@@ -1268,10 +978,10 @@ gboolean blue_hfp_process_string_timeout(gpointer data)
     else
     {
 
-        printf("-----------------------\n");
+        /*printf("-----------------------\n");
         gpointer str= g_queue_pop_head(smsQueue);
 
-        char *tmp= blue_utils_get_sms_msg((char *)str);
+        //char *tmp= blue_utils_get_sms_msg((char *)str);
 
         printf("*********************%s\n",tmp);
 
@@ -1282,6 +992,7 @@ gboolean blue_hfp_process_string_timeout(gpointer data)
                 (blueHfp->hfpCallback)(SMMT_EVENT,NULL,(int)tmp);
             }
         }
+		*/
     }
 
 
@@ -1291,41 +1002,4 @@ gboolean blue_hfp_process_string_timeout(gpointer data)
 
 void test()
 {
-    char *tmp = "test";
-//	(blueHfp->hfpCallback)(PHONESTATUS_EVENT,NULL,CALLINACTIVE);
-//	(blueHfp->hfpCallback)(PHONESTATUS_EVENT,NULL,CALLACTIVE);
-//	(blueHfp->hfpCallback)(SMMT_EVENT,NULL,tmp);
-
-    /*
-    char *str = "+CMGR: 0,,143\
-    	0891683110406505F0240BA13129510233F80008210132415330237C002E002C003F0027003A20260040002F002800210022003B0029002A0026005B007E0060005C005D002300240025005E003D002D002B005F007D007C003CFF07FF0EFF0C003EFF1FFF0FFF08FF1AFF06FF0AFF1BFF09FF02FF01FF3BFF03FF5EFF40FF3CFF04FF05FE3FFF3FFF5BFF1DFF0DFF0BFF5DFF5CFF1CFF1E";
-
-    char *p = NULL;
-    p = strstr(str,"CMGR");
-    if(p !=NULL)
-    {
-        char *tmp = blue_utils_get_sms_msg(str);
-
-    	if(blueHfp->hfpCallback)
-    	{
-    		(blueHfp->hfpCallback)(SMMT_EVENT,NULL,tmp);
-    	}
-
-
-    }*/
-
-    /*		char *str3 = "+CMGR: 0,,53\
-    			\
-    			0891683110301305F0040BA18166018158F700002101130175452326F4F05C1783C5743119CC25CBE56430DD2CE6AAD9703098AE9D07B1DFE3303DFD7603";
-
-    		char *p = NULL;
-            p = strstr(str3,"CMGR");
-            if(p !=NULL)
-            {
-                char *tmp = blue_utils_get_sms_msg(str3);
-                printf("%s\n",tmp);
-    			(blueHfp->hfpCallback)(SMMT_EVENT,NULL,tmp);
-        	}
-
-    */
 }

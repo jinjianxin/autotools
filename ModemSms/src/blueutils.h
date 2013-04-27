@@ -16,7 +16,7 @@ char *blue_utils_get_ring_number(char *arg);
 /*短信原始内容*/
 char *blue_utils_get_sms_msg(const char *arg);
 
-string *blue_utils_get_sms_msg(const string& arg);
+string blue_utils_get_sms_msg(const string& arg);
 
 char *blue_utils_number_to16(int size);
 
@@ -36,6 +36,7 @@ string blue_utils_get_msg_time(const string& str);
 
 /*获得短信内容*/
 char *blue_utils_get_msg_content(const char *str,int arg);
+string blue_utils_get_msg_content(const string& str,int sig);
 /*将字符串转为int类型*/
 unsigned long blue_utils_unicode_int(const char* str);
 

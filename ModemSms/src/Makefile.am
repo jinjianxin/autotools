@@ -30,5 +30,5 @@ modemsms_SOURCES = \
 
 modemsms_LDFLAGS = 
 
-modemsms_LDADD = $(MODEMSMS_LIBS)
+modemsms_LDADD = $(MODEMSMS_LIBS) -lX11 -lpthread
 

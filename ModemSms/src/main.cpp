@@ -170,6 +170,7 @@ static DBusHandlerResult mking_signal_filter(DBusConnection *connection,
 		
 //            sendmessage("send message",sendSM(contents,str));	
 			sendSM(contents,str);
+			sendSM(string(contents),string(str));
         }
     }
     else if (dbus_message_is_signal(message,"com.asianux.pdaemon","fom"))

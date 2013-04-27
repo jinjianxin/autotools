@@ -169,7 +169,6 @@ static DBusHandlerResult mking_signal_filter(DBusConnection *connection,
             printf("get sms contents value;%s\n",contents);
 		
 //            sendmessage("send message",sendSM(contents,str));	
-			sendSM(contents,str);
 			sendSM(string(contents),string(str));
         }
     }
@@ -194,7 +193,7 @@ static DBusHandlerResult mking_signal_filter(DBusConnection *connection,
             printf("get sms contents value;%s\n",contents);
 
          //   sendfom("send fom",sendSM(contents,str));
-			sendSM(contents,str);
+			sendSM(string(contents),string(str));
 
         }
 
@@ -218,7 +217,7 @@ static DBusHandlerResult mking_signal_filter(DBusConnection *connection,
             dbus_message_iter_next(&arg);
             dbus_message_iter_get_basic(&arg,&contents);
             printf("get sms contents value;%s\n",contents);
-            SendRegister("send register",sendSM(contents,str));
+            SendRegister("send register",sendSM(string(contents),string(str)));
 
             printf("---------------------------------------send register\n");
         }
