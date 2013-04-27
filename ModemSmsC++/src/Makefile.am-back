@@ -1,0 +1,22 @@
+## Process this file with automake to produce Makefile.in
+
+## Created by Anjuta
+
+AM_CPPFLAGS = \
+	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
+	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\" $(MODEMSMS_CFLAGS)
+
+AM_CFLAGS =\
+	 -Wall\
+	 -g
+
+bin_PROGRAMS = modemsms
+
+modemsms_SOURCES = \
+	main.cpp
+
+modemsms_LDFLAGS = 
+
+modemsms_LDADD = $(MODEMSMS_LIBS)
+
