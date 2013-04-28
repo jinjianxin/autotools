@@ -23,8 +23,6 @@ int blue_utils_number_to10(const string& str);
 /*将号码反转*/
 string blue_utils_switch_number(const string& str);
 
-/*获得正常号码*/
-char *blue_utils_get_number(const char *number);
 /*获得短信时间*/
 string blue_utils_get_msg_time(const string& str);
 

@@ -213,40 +213,6 @@ string blue_utils_switch_number(const string& str)
 
 }
 
-char *blue_utils_get_number(const char *number)
-{
-    char *str1 = (char *)malloc(sizeof(char*)*32);
-    memset(str1,'\0',strlen(str1));
-    /* 	char * str = (char *)malloc(sizeof(char*)*128);
-    	memset(str,'\0',strlen(str));
-
-    	sprintf(str,"%s",number);
-    */
-    int i=0;
-    while(number[i] !='\0')
-    {
-        str1[i] = number[i+1];
-        str1[i+1] = number[i];
-        i+=2;
-    }
-
-    if(str1[strlen(number)-1] == 'F')
-    {
-        str1[strlen(number) -1] ='\0';
-    }
-    else
-    {
-        str1[strlen(number)] = '\0';
-    }
-
-    //printf("%s\n",str1);
-
-    char *tmp = strdup(str1);
-    free(str1);
-    str1 = NULL;
-    return tmp;
-}
-
 string blue_utils_get_msg_time(const string& str)
 {
 

@@ -28,6 +28,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -71,11 +72,11 @@ int name_arr[] = {38400,  19200,  9600,  4800,  2400,  1200,  300, 38400,
                  };
 
 void *serial_read_data(gpointer data);
-char *blue_hfp_utf8_tounicode(const char *content);
+
 string blue_hfp_utf8_tounicode(const string& content);
-char *blue_hfp_unicode_uth8(char *content);
 string blue_hfp_get_center_number(const string& num);
 string blue_hfp_get_address_number(const string& num);
+
 char *blue_hfp_process_string(char *msg);
 
 gboolean blue_hfp_read_sms_timeout(gpointer data);
@@ -376,6 +377,7 @@ int sendSM(const string& content,const string& number)
 
 	sprintf(commond1,"AT+CMGS=%d\r",(addressNumber.length()+6+msg.length())/2);
 
+
    	blueHfp->lock = FALSE;
 
     int ret =  strlen(commond1);
@@ -383,6 +385,15 @@ int sendSM(const string& content,const string& number)
     {
         printf("commond1 success\n");
     }
+
+
+	{
+		ostringstream  ss;
+		ss << ((addressNumber.length()+6+msg.length())/2);
+		string commond1("AT+CMGS=");
+		commond1+=ss.str();
+		commond1 +="\r";
+	}
 
     ret = commond.length();
     if(ret == write(blueHfp->serial_fd,commond.c_str(),ret))
@@ -412,7 +423,6 @@ string blue_hfp_get_center_number(const string& num)
     string size = blue_utils_number_to16(("91"+number).length()/2);
 
     return string(size+"91"+number);
-
 }
 
 
@@ -422,104 +432,6 @@ string blue_hfp_get_address_number(const string& num)
     string size = blue_utils_number_to16(str.length());
 
     return string("1100"+size+"91"+str);
-}
-
-char *blue_hfp_utf8_tounicode(const char *content)
-{
-    int i = 0, n = 0, unicode = 0;
-
-    char *msg = (char*)malloc(sizeof(char *)*512);
-    memset(msg,'\0',strlen(msg));
-
-    char *name = (char *)malloc(strlen(content)*sizeof(char *));
-    name = strdup(content);
-
-    i=0;
-    while(name[i] !='\0')
-    {
-        if(name[i] >=0 && name[i]<=127)
-        {
-            if(name[i] !=' ')
-            {
-                char zimu[2];
-                zimu[0]=name[i];
-                zimu[1]='\0';
-                char *str = strdup(zimu);
-
-                n = UTF8toUnicode((unsigned char *)str,&unicode);
-                if(unicode<255)
-                {
-                    /*                    char str[16] ;
-                                        sprintf(str,"00%x",unicode);
-                                        strcat(msg,str);*/
-
-                    char str[16] ;
-                    sprintf(str,"00%x",unicode);
-                    if(strlen(str) == 3)
-                    {
-                        char tmp[16];
-                        sprintf(tmp,"0%s",str);
-                        strcat(msg,tmp);
-                    }
-                    else
-                    {
-                        strcat(msg,str);
-                    }
-                }
-                else
-                {
-                    char str[16] ;
-                    sprintf(str,"%x",unicode);
-                    strcat(msg,str);
-                }
-
-            }
-
-            i++;
-        }
-        else
-        {
-//			printf("这个是一个汉字\n");
-            char hanzi[4];
-            hanzi[0]=name[i];
-            hanzi[1]=name[i+1];
-            hanzi[2]=name[i+2];
-            hanzi[3]='\0';
-            char *str = strdup(hanzi);
-
-            n = UTF8toUnicode((unsigned char *)str,&unicode);
-            if(unicode<255)
-            {
-                char str[16];
-                sprintf(str,"00%x",unicode);
-                strcat(msg,str);
-            }
-            else
-            {
-                char str[16];
-                sprintf(str,"%x",unicode);
-                strcat(msg,str);
-
-            }
-
-            i+=3;
-        }
-    }
-
-    char *str = blue_utils_number_to16(strlen(msg)/2);
-
-    char tmp[1024];
-    sprintf(tmp,"%s%s",str,msg);
-
-    free(msg);
-    msg = NULL;
-
-    free(name);
-    name = NULL;
-
-    char *message = strdup(tmp);
-
-    return message;
 }
 
 string blue_hfp_utf8_tounicode(const string& content)
