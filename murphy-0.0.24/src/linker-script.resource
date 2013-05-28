@@ -1,0 +1,27 @@
+{
+    global:
+        mrp_res_create;
+        mrp_res_destroy;
+        mrp_res_list_application_classes;
+        mrp_res_list_resources;
+        mrp_res_create_resource_set;
+        mrp_res_delete_resource_set;
+        mrp_res_copy_resource_set;
+        mrp_res_equal_resource_set;
+        mrp_res_acquire_resource_set;
+        mrp_res_release_resource_set;
+        mrp_res_create_resource;
+        mrp_res_list_resource_names;
+        mrp_res_get_resource_by_name;
+        mrp_res_delete_resource;
+        mrp_res_delete_resource_by_name;
+        mrp_res_list_attribute_names;
+        mrp_res_get_attribute_by_name;
+        mrp_res_set_attribute_string;
+        mrp_res_set_attribute_uint;
+        mrp_res_set_attribute_int;
+        mrp_res_set_attribute_double;
+        mrp_res_free_string_array;
+    local:
+        *;
+};

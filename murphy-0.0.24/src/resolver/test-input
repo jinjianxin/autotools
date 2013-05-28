@@ -1,0 +1,22 @@
+#auto-update-target all
+
+target all
+    depends on video_route audio_route \
+               audio_volume audio_cork audio_mute \
+               $vibra $backlight
+# signal_enforcement_points(&target='all', 'audio', 'video', 1, -2, +3)
+# foobar(&just='a test', +1, -2, 3.141, -1U8, 0xffffffffffU64)
+# hex(-0xf)
+    update script
+        echo('Running actions for target "all"...')
+        echo('foo', 'bar', 'foobar...', 1, 2, 3.141, -9.81)
+    end script
+
+include "test-input-video"
+include "test-input-audio"
+
+target luatest
+    depends on $audio_playback_owner
+    update script (lua)
+        print("Hello from a resolver update Lua scriptlet...")
+    end script

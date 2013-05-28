@@ -1,0 +1,32 @@
+{
+    global:
+        mrp_lua_check_strarray;
+        mrp_lua_push_strarray;
+        mrp_lua_free_strarray;
+        mrp_lua_print_strarray;
+        mrp_create_funcbridge_class;
+        mrp_create_funcarray_class;
+        mrp_funcbridge_create_cfunc;
+        mrp_funcbridge_create_luafunc;
+        mrp_funcbridge_ref;
+        mrp_funcbridge_unref;
+        mrp_funcbridge_call_from_c;
+        mrp_funcbridge_check;
+        mrp_funcbridge_push;
+        mrp_funcarray_create;
+        mrp_funcarray_call_from_c;
+        mrp_funcarray_check;
+        mrp_lua_create_object_class;
+        mrp_lua_get_class_table;
+        mrp_lua_create_object;
+        mrp_lua_set_object_name;
+        mrp_lua_set_object_index;
+        mrp_lua_destroy_object;
+        mrp_lua_find_object;
+        mrp_lua_check_object;
+        mrp_lua_to_object;
+        mrp_lua_push_object;
+        mrp_lua_get_object_classdef;
+    local:
+        *;
+};

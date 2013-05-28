@@ -1,0 +1,8 @@
+{
+    global:
+        mrp_mainloop_register_with_glib;
+        mrp_mainloop_unregister_from_glib;
+        mrp_mainloop_glib_get;
+    local:
+        *;
+};

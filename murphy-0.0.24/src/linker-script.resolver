@@ -1,0 +1,23 @@
+{
+    global:
+        mrp_resolver_create;
+        mrp_resolver_parse;
+        mrp_resolver_add_target;
+        mrp_resolver_add_prepared_target;
+        mrp_resolver_add_alias;
+        mrp_resolver_enable_autoupdate;
+        mrp_resolver_destroy;
+        mrp_resolver_prepare;
+        mrp_resolver_update_targetl;
+        mrp_resolver_update_targetv;
+        mrp_resolver_declare_variable;
+        mrp_resolver_get_value;
+        mrp_resolver_get_value_by_name;
+        mrp_print_value;
+        mrp_resolver_dump_targets;
+        mrp_resolver_dump_facts;
+        mrp_resolver_register_interpreter;
+        mrp_resolver_unregister_interpreter;
+    local:
+        *;
+};

@@ -1,0 +1,5 @@
+target video_route
+    depends on $video_device_selectable $gconf
+    update script
+        echo('Running actions for target "video_route"...')
+    end script

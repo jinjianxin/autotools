@@ -1,0 +1,11 @@
+generate_linker_scripts() {
+    local _ld_scripts
+
+    info "* Generating linker scripts..." && \
+    ./bootstrap && make generate-linker-scripts && \
+        _ld_scripts="`find . -name linker-script.*`" && \
+        git add $_ld_scripts && \
+        git commit -m "packaging: pre-generated linker scripts." $_ld_scripts
+}
+
+generate_linker_scripts
