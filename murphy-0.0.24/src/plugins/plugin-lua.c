@@ -129,6 +129,7 @@ static void luaR_cleanup(mrp_scriptlet_t *script)
 
 static int plugin_init(mrp_plugin_t *plugin)
 {
+    printf("###################################################plugin_init\n");
     static mrp_interpreter_t interpreter = {
         .name    = LUAR_INTERPRETER_NAME,
         .compile = luaR_compile,
@@ -141,6 +142,8 @@ static int plugin_init(mrp_plugin_t *plugin)
     const char       *cfg  = args[ARG_CONFIG].str;
     int               res  = args[ARG_RESOLVER].bln;
     lua_State        *L;
+
+     printf("***********%s(\t%s)\t-%d:\t%d\n",__FUNCTION__,__FILE__,__LINE__,res);
 
     L = mrp_lua_set_murphy_context(plugin->ctx);
 
@@ -157,12 +160,19 @@ static int plugin_init(mrp_plugin_t *plugin)
         else
             mrp_log_info("plugin-lua: resolver Lua support disabled.");
 
+        printf("***********%s(\t%s)\t-%d:\t%s\n",__FUNCTION__,__FILE__,__LINE__,cfg);
+
+
         if (load_config(L, cfg))
+        {
+            printf("###################################################plugin_init finish\n");
             return TRUE;
+        }
         else
             if (res)
                 mrp_unregister_interpreter(LUAR_INTERPRETER_NAME);
     }
+
 
     return FALSE;
 }

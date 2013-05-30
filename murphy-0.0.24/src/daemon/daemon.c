@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
     /**
      *将输出重定向,变为一个守护进程
      */
-    daemonize(ctx);
+  //  daemonize(ctx);
     run_mainloop(ctx);
     stop_plugins(ctx);
 

@@ -184,7 +184,7 @@ mrp_plugin_t *mrp_load_plugin(mrp_context_t *ctx, const char *name,
                               const char *instance, mrp_plugin_arg_t *args,
                               int narg)
 {
-    printf("***********%s(\t%s)\t-%d:\t%s\n",__FUNCTION__,__FILE__,__LINE__,instance);
+  //  printf("***********%s(\t%s)\t-%d:\t%s\n",__FUNCTION__,__FILE__,__LINE__,instance);
     mrp_plugin_t        *plugin;
     char                 path[PATH_MAX];
     mrp_plugin_descr_t  *dynamic, *builtin, *descr;
@@ -496,6 +496,7 @@ int mrp_start_plugin(mrp_plugin_t *plugin)
       */
     if (plugin != NULL) {
         if (plugin->state == MRP_PLUGIN_LOADED) {
+           //  printf("***********%s(\t%s)\t-%d:\t%s\n",__FUNCTION__,__FILE__,__LINE__,plugin->instance);
             if (!plugin->descriptor->init(plugin)) {
                 mrp_log_error("Failed to start plugin %s (%s).",
                               plugin->instance, plugin->descriptor->name);

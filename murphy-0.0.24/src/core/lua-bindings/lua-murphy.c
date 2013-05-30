@@ -87,6 +87,7 @@ static int register_bindings(mrp_lua_bindings_t *b)
     luaL_getmetatable(L, b->meta);
 
     for (m = b->methods; m->name != NULL; m++) {
+            printf("***********%s(\t%s)\t-%d:\t%s\n",__FUNCTION__,__FILE__,__LINE__,m->name);
         lua_pushstring(L, m->name);
         lua_pushcfunction(L, m->func);
         lua_rawset(L, -3);
